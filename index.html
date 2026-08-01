@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión y Correlación Estadística</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Encabezado -->
+    <header class="bg-indigo-600 text-white py-4 px-6 shadow-md">
+        <h1 class="text-xl font-bold text-center">Regresión Lineal y Correlación</h1>
+        <p class="text-xs text-indigo-200 text-center mt-1">Análisis Bivariado para Contabilidad</p>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-6">
+
+        <!-- Tarjeta de Entrada de Datos -->
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+            <div>
+                <label for="dataX" class="block text-sm font-semibold text-slate-700 mb-1">
+                    Datos X (separados por comas):
+                </label>
+                <textarea id="dataX" rows="2" 
+                    class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                    placeholder="Ej. 1, 2, 3, 4, 5"></textarea>
+            </div>
+
+            <div>
+                <label for="dataY" class="block text-sm font-semibold text-slate-700 mb-1">
+                    Datos Y (separados por comas):
+                </label>
+                <textarea id="dataY" rows="2" 
+                    class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                    placeholder="Ej. 2, 4, 5, 4, 6"></textarea>
+            </div>
+            
+            <button onclick="procesarDatosBivariados()" 
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl transition duration-200 shadow-sm active:scale-95 text-sm">
+                Calcular y Graficar Regresión
+            </button>
+        </section>
+
+        <!-- Tarjeta de Resultados Estadísticos -->
+        <section id="resultsSection" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hidden space-y-3">
+            <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Resultados Bivariados</h2>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-slate-50 p-3 rounded-xl col-span-2">
+                    <span class="block text-xs text-slate-400 font-medium">Coeficiente de Correlación de Pearson (r)</span>
+                    <span id="resPearson" class="font-bold text-indigo-600 text-base">-</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl col-span-2">
+                    <span class="block text-xs text-slate-400 font-medium">Ecuación de la Recta de Regresión</span>
+                    <span id="resEcuacion" class="font-bold text-indigo-600 text-base">-</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl">
+                    <span class="block text-xs text-slate-400 font-medium">Pendiente (m)</span>
+                    <span id="resPendiente" class="font-bold text-indigo-600">-</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl">
+                    <span class="block text-xs text-slate-400 font-medium">Intersección (b)</span>
+                    <span id="resInterseccion" class="font-bold text-indigo-600">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarjeta del Gráfico -->
+        <section id="chartSection" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hidden space-y-3">
+            <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Gráfico de Dispersión y Tendencia</h2>
+            <div class="relative w-full h-72">
+                <canvas id="statsChart"></canvas>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="text-center py-4 text-xs text-slate-400">
+        Herramienta de Análisis Estadístico &copy; 2026
+    </footer>
+
+    <!-- Lógica de Programación -->
+    <script>
+        let myChart = null;
+
+        function procesarDatosBivariados() {
+            const inputX = document.getElementById('dataX').value;
+            const inputY = document.getElementById('dataY').value;
+            
+            // Convertir cadenas a arreglos de números válidos
+            const x = inputX.split(',').map(item => parseFloat(item.trim())).filter(item => !isNaN(item));
+            const y = inputY.split(',').map(item => parseFloat(item.trim())).filter(item => !isNaN(item));
+
+            if (x.length === 0 || y.length === 0) {
+                alert("Por favor, ingresa números válidos en ambos campos.");
+                return;
+            }
+
+            if (x.length !== y.length) {
+                alert(`Error: La cantidad de datos no coincide.\n- Elementos en X: ${x.length}\n- Elementos en Y: ${y.length}\nAmbas listas deben tener la misma cantidad de elementos.`);
+                return;
+            }
+
+            const n = x.length;
+
+            // Cálculos sumatorios básicos
+            const sumX = x.reduce((acc, val) => acc + val, 0);
+            const sumY = y.reduce((acc, val) => acc + val, 0);
+            const sumXY = x.reduce((acc, val, i) => acc + (val * y[i]), 0);
+            const sumX2 = x.reduce((acc, val) => acc + (val * val), 0);
+            const sumY2 = y.reduce((acc, val) => acc + (val * val), 0);
+
+            // 1. Coeficiente de Correlación de Pearson (r)
+            const numeradorR = (n * sumXY) - (sumX * sumY);
+            const denominadorR = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
+            const r = denominadorR === 0 ? 0 : numeradorR / denominadorR;
+
+            // 2. Recta de Regresión Lineal: y = mx + b
+            const denominadorM = (n * sumX2) - (sumX * sumX);
+            const m = denominadorM === 0 ? 0 : ((n * sumXY) - (sumX * sumY)) / denominadorM;
+            const b = (sumY - (m * sumX)) / n;
+
+            // Mostrar Resultados en Pantalla
+            document.getElementById('resPearson').innerText = r.toFixed(4);
+            document.getElementById('resPendiente').innerText = m.toFixed(4);
+            document.getElementById('resInterseccion').innerText = b.toFixed(4);
+            
+            const signoB = b >= 0 ? `+ ${b.toFixed(2)}` : `- ${Math.abs(b).toFixed(2)}`;
+            document.getElementById('resEcuacion').innerText = `y = ${m.toFixed(2)}x ${signoB}`;
+
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('chartSection').classList.remove('hidden');
+
+            // Preparar puntos de dispersión ordenados por X para la línea de tendencia
+            const puntosOriginales = x.map((val, i) => ({ x: val, y: y[i] }));
+            const xOrdenado = [...x].sort((a, b) => a - b);
+            const minX = xOrdenado[0];
+            const maxX = xOrdenado[xOrdenado.length - 1];
+
+            // Puntos de la línea de tendencia (inicio y fin)
+            const lineaTendencia = [
+                { x: minX, y: m * minX + b },
+                { x: maxX, y: m * maxX + b }
+            ];
+
+            renderScatterChart(puntosOriginales, lineaTendencia);
+        }
+
+        function renderScatterChart(puntos, linea) {
+            const ctx = document.getElementById('statsChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Datos (X, Y)',
+                            data: puntos,
+                            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'Línea de Tendencia',
+                            data: linea,
+                            type: 'line',
+                            borderColor: 'rgba(239, 68, 68, 0.9)', // Rojo sutil para resaltar la recta
+                            borderWidth: 2,
+                            pointRadius: 0, // Sin puntos en la línea
+                            fill: false,
+                            tension: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: { display: true, text: 'X' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Y' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
