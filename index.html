@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regresión y Gráficos Estadísticos</title>
+    <title>Suite Estadística Académica</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -13,155 +13,349 @@
 
     <!-- Encabezado -->
     <header class="bg-indigo-600 text-white py-4 px-6 shadow-md">
-        <h1 class="text-xl font-bold text-center">Regresión y Gráficos Estadísticos</h1>
-        <p class="text-xs text-indigo-200 text-center mt-1">Análisis Bivariado y Visualización Dinámica</p>
+        <h1 class="text-xl font-bold text-center">Suite Estadística Académica</h1>
+        <p class="text-xs text-indigo-200 text-center mt-1">Análisis Bivariado Completo</p>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-6">
+    <main class="flex-grow p-4 max-w-md mx-auto w-full space-y-5">
 
-        <!-- Tarjeta de Entrada de Datos -->
+        <!-- Tarjeta de Entrada de Datos Compartida -->
         <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Entrada de Datos</h2>
             <div>
-                <label for="dataX" class="block text-sm font-semibold text-slate-700 mb-1">
+                <label for="dataX" class="block text-xs font-semibold text-slate-700 mb-1">
                     Datos X (separados por comas):
                 </label>
                 <textarea id="dataX" rows="2" 
                     class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                    placeholder="Ej. 1, 2, 3, 4, 5"></textarea>
+                    placeholder="Ej. 10, 20, 30, 40, 50"></textarea>
             </div>
 
             <div>
-                <label for="dataY" class="block text-sm font-semibold text-slate-700 mb-1">
+                <label for="dataY" class="block text-xs font-semibold text-slate-700 mb-1">
                     Datos Y (separados por comas):
                 </label>
                 <textarea id="dataY" rows="2" 
                     class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-                    placeholder="Ej. 2, 4, 5, 4, 6"></textarea>
-            </div>
-
-            <div>
-                <label for="chartTypeSelect" class="block text-sm font-semibold text-slate-700 mb-1">
-                    Tipo de Gráfico:
-                </label>
-                <select id="chartTypeSelect" onchange="cambiarTipoGrafico()"
-                    class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
-                    <option value="scatter">Gráfico de Dispersión (con Línea)</option>
-                    <option value="bar">Gráfico de Barras (Datos Y)</option>
-                    <option value="pie">Gráfico de Pastel (Proporcional)</option>
-                </select>
+                    placeholder="Ej. 15, 25, 35, 48, 55"></textarea>
             </div>
             
-            <button onclick="procesarDatosBivariados()" 
+            <button onclick="procesarTodo()" 
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-xl transition duration-200 shadow-sm active:scale-95 text-sm">
-                Calcular y Graficar
+                Procesar y Actualizar Todo
             </button>
         </section>
 
-        <!-- Tarjeta de Resultados Estadísticos -->
-        <section id="resultsSection" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hidden space-y-3">
-            <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Resultados Bivariados</h2>
-            <div class="grid grid-cols-2 gap-3 text-sm">
-                <div class="bg-slate-50 p-3 rounded-xl col-span-2">
-                    <span class="block text-xs text-slate-400 font-medium">Coeficiente de Correlación de Pearson (r)</span>
-                    <span id="resPearson" class="font-bold text-indigo-600 text-base">-</span>
-                </div>
-                <div class="bg-slate-50 p-3 rounded-xl col-span-2">
-                    <span class="block text-xs text-slate-400 font-medium">Ecuación de la Recta de Regresión</span>
-                    <span id="resEcuacion" class="font-bold text-indigo-600 text-base">-</span>
-                </div>
-                <div class="bg-slate-50 p-3 rounded-xl">
-                    <span class="block text-xs text-slate-400 font-medium">Pendiente (m)</span>
-                    <span id="resPendiente" class="font-bold text-indigo-600">-</span>
-                </div>
-                <div class="bg-slate-50 p-3 rounded-xl">
-                    <span class="block text-xs text-slate-400 font-medium">Intersección (b)</span>
-                    <span id="resInterseccion" class="font-bold text-indigo-600">-</span>
-                </div>
-            </div>
-        </section>
+        <!-- Navegación por 3 Pestañas -->
+        <div class="flex rounded-xl bg-slate-200 p-1 shadow-inner gap-1">
+            <button id="btnTab1" onclick="cambiarPestaña(1)" class="flex-1 py-2 text-[11px] font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition">
+                1. Directas
+            </button>
+            <button id="btnTab2" onclick="cambiarPestaña(2)" class="flex-1 py-2 text-[11px] font-bold rounded-lg text-slate-600 transition">
+                2. Diferenciales/Z
+            </button>
+            <button id="btnTab3" onclick="cambiarPestaña(3)" class="flex-1 py-2 text-[11px] font-bold rounded-lg text-slate-600 transition">
+                3. Análisis y Gráficos
+            </button>
+        </div>
 
-        <!-- Tarjeta del Gráfico -->
-        <section id="chartSection" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hidden space-y-3">
-            <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Visualización Gráfica</h2>
-            <div class="relative w-full h-72">
-                <canvas id="statsChart"></canvas>
-            </div>
-        </section>
+        <!-- PESTAÑA 1: Puntuaciones Directas y Sumatorias -->
+        <div id="tab1Content" class="space-y-4">
+            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Tabla de Puntuaciones Directas</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b text-slate-400">
+                                <th class="pb-2 font-semibold">X</th>
+                                <th class="pb-2 font-semibold">Y</th>
+                                <th class="pb-2 font-semibold">X²</th>
+                                <th class="pb-2 font-semibold">Y²</th>
+                                <th class="pb-2 font-semibold">XY</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaDirectas" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="5" class="py-4 text-center text-slate-400">Ingrese datos y presione procesar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- PESTAÑA 2: Puntuaciones Diferenciales y Z -->
+        <div id="tab2Content" class="space-y-4 hidden">
+            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Puntuaciones Diferenciales y Z</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b text-slate-400">
+                                <th class="pb-2 font-semibold">x (X - X̄)</th>
+                                <th class="pb-2 font-semibold">y (Y - Ȳ)</th>
+                                <th class="pb-2 font-semibold">Zx</th>
+                                <th class="pb-2 font-semibold">Zy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaDiferenciales" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-slate-400">Ingrese datos y presione procesar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- PESTAÑA 3: Análisis y Gráficos -->
+        <div id="tab3Content" class="space-y-4 hidden">
+            <!-- Resultados de Regresión y Correlación -->
+            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Indicadores Bivariados</h2>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="bg-slate-50 p-3 rounded-xl col-span-2">
+                        <span class="block text-xs text-slate-400 font-medium">Coeficiente de Pearson (r)</span>
+                        <span id="resPearson" class="font-bold text-indigo-600 text-base">-</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-medium">Coef. Determinación (R²)</span>
+                        <span id="resR2" class="font-bold text-indigo-600 text-base">-</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl">
+                        <span class="block text-xs text-slate-400 font-medium">No Determinación (1 - R²)</span>
+                        <span id="resNoR2" class="font-bold text-indigo-600 text-base">-</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl col-span-2">
+                        <span class="block text-xs text-slate-400 font-medium">Ecuación de Regresión</span>
+                        <span id="resEcuacion" class="font-bold text-indigo-600 text-base">-</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Selector y Gráfico -->
+            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Visualización</h2>
+                    <select id="chartTypeSelect" onchange="renderizarGraficoSeleccionado()"
+                        class="text-xs p-1.5 border border-slate-200 rounded-lg focus:outline-none bg-slate-50 text-indigo-600 font-bold">
+                        <option value="scatter">Dispersión (con Línea)</option>
+                        <option value="bar">Barras (Valores Y)</option>
+                        <option value="pie">Pastel (Proporcional)</option>
+                    </select>
+                </div>
+                <div class="relative w-full h-72">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Análisis e Interpretación Académica -->
+            <section class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Análisis e Interpretación Académica</h2>
+                <div id="analisisAcademico" class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                    <p class="text-slate-400">Ingrese datos válidos en X y Y para generar la interpretación financiera y estadística.</p>
+                </div>
+            </section>
+        </div>
 
     </main>
 
     <!-- Pie de página -->
     <footer class="text-center py-4 text-xs text-slate-400">
-        Herramienta de Análisis Estadístico &copy; 2026
+        Suite Académica de Estadística &copy; 2026
     </footer>
 
     <!-- Lógica de Programación -->
     <script>
         let myChart = null;
-        let ultimosDatosX = [];
-        let ultimosDatosY = [];
-        let ultimaPendiente = 0;
-        let ultimaInterseccion = 0;
+        let ultimosX = [];
+        let ultimosY = [];
+        let ultimoM = 0;
+        let ultimoB = 0;
 
-        function procesarDatosBivariados() {
+        function cambiarPestaña(num) {
+            const btn1 = document.getElementById('btnTab1');
+            const btn2 = document.getElementById('btnTab2');
+            const btn3 = document.getElementById('btnTab3');
+            const tab1 = document.getElementById('tab1Content');
+            const tab2 = document.getElementById('tab2Content');
+            const tab3 = document.getElementById('tab3Content');
+
+            btn1.className = "flex-1 py-2 text-[11px] font-bold rounded-lg text-slate-600 transition";
+            btn2.className = "flex-1 py-2 text-[11px] font-bold rounded-lg text-slate-600 transition";
+            btn3.className = "flex-1 py-2 text-[11px] font-bold rounded-lg text-slate-600 transition";
+
+            tab1.classList.add('hidden');
+            tab2.classList.add('hidden');
+            tab3.classList.add('hidden');
+
+            if (num === 1) {
+                btn1.className = "flex-1 py-2 text-[11px] font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
+                tab1.classList.remove('hidden');
+            } else if (num === 2) {
+                btn2.className = "flex-1 py-2 text-[11px] font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
+                tab2.classList.remove('hidden');
+            } else if (num === 3) {
+                btn3.className = "flex-1 py-2 text-[11px] font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
+                tab3.classList.remove('hidden');
+                if (ultimosX.length > 0) {
+                    setTimeout(() => renderizarGraficoSeleccionado(), 50);
+                }
+            }
+        }
+
+        function procesarTodo() {
             const inputX = document.getElementById('dataX').value;
             const inputY = document.getElementById('dataY').value;
-            
+
             const x = inputX.split(',').map(item => parseFloat(item.trim())).filter(item => !isNaN(item));
             const y = inputY.split(',').map(item => parseFloat(item.trim())).filter(item => !isNaN(item));
 
-            if (x.length === 0 || y.length === 0) {
-                alert("Por favor, ingresa números válidos en ambos campos.");
+            if (x.length === 0) {
+                alert("Por favor, ingresa al menos un número válido en la variable X.");
                 return;
             }
 
             if (x.length !== y.length) {
-                alert(`Error: La cantidad de datos no coincide.\n- Elementos en X: ${x.length}\n- Elementos en Y: ${y.length}\nAmbas listas deben tener la misma cantidad de elementos.`);
+                alert(`Error: Las listas no coinciden.\n- Elementos en X: ${x.length}\n- Elementos en Y: ${y.length}\nDeben tener la misma cantidad.`);
                 return;
             }
 
-            ultimosDatosX = x;
-            ultimosDatosY = y;
+            ultimosX = x;
+            ultimosY = y;
             const n = x.length;
 
+            // --- ESTADÍSTICOS BÁSICOS PARA PESTAÑA 2 ---
             const sumX = x.reduce((acc, val) => acc + val, 0);
             const sumY = y.reduce((acc, val) => acc + val, 0);
-            const sumXY = x.reduce((acc, val, i) => acc + (val * y[i]), 0);
-            const sumX2 = x.reduce((acc, val) => acc + (val * val), 0);
-            const sumY2 = y.reduce((acc, val) => acc + (val * val), 0);
+            const mediaX = sumX / n;
+            const mediaY = sumY / n;
 
-            const numeradorR = (n * sumXY) - (sumX * sumY);
-            const denominadorR = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
+            const sumaCuadradosX = x.reduce((acc, val) => acc + Math.pow(val - mediaX, 2), 0);
+            const sumaCuadradosY = y.reduce((acc, val) => acc + Math.pow(val - mediaY, 2), 0);
+            const desvX = Math.sqrt(n > 1 ? sumaCuadradosX / (n - 1) : 0);
+            const desvY = Math.sqrt(n > 1 ? sumaCuadradosY / (n - 1) : 0);
+
+            // --- PESTAÑA 1: PUNTUACIONES DIRECTAS Y SUMATORIAS ---
+            let htmlDirectas = '';
+            let sumX_val = 0, sumY_val = 0, sumX2_val = 0, sumY2_val = 0, sumXY_val = 0;
+
+            for (let i = 0; i < n; i++) {
+                const xi = x[i];
+                const yi = y[i];
+                const x2 = xi * xi;
+                const y2 = yi * yi;
+                const xy = xi * yi;
+
+                sumX_val += xi;
+                sumY_val += yi;
+                sumX2_val += x2;
+                sumY2_val += y2;
+                sumXY_val += xy;
+
+                htmlDirectas += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 font-medium text-slate-800">${xi.toFixed(2)}</td>
+                        <td class="py-2.5 text-slate-600">${yi.toFixed(2)}</td>
+                        <td class="py-2.5 text-slate-600">${x2.toFixed(2)}</td>
+                        <td class="py-2.5 text-slate-600">${y2.toFixed(2)}</td>
+                        <td class="py-2.5 text-indigo-600 font-semibold">${xy.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            // Fila de Totales / Sumatorias
+            htmlDirectas += `
+                <tr class="bg-indigo-50/60 font-bold border-t-2 border-indigo-100 text-indigo-900">
+                    <td class="py-3">Σ=${sumX_val.toFixed(2)}</td>
+                    <td class="py-3">Σ=${sumY_val.toFixed(2)}</td>
+                    <td class="py-3">Σ=${sumX2_val.toFixed(2)}</td>
+                    <td class="py-3">Σ=${sumY2_val.toFixed(2)}</td>
+                    <td class="py-3">Σ=${sumXY_val.toFixed(2)}</td>
+                </tr>
+            `;
+            document.getElementById('tablaDirectas').innerHTML = htmlDirectas;
+
+            // --- PESTAÑA 2: PUNTUACIONES DIFERENCIALES Y Z ---
+            let htmlDiferenciales = '';
+            for (let i = 0; i < n; i++) {
+                const xi = x[i];
+                const yi = y[i];
+                const difX = xi - mediaX;
+                const difY = yi - mediaY;
+                const zx = desvX === 0 ? 0 : difX / desvX;
+                const zy = desvY === 0 ? 0 : difY / desvY;
+
+                htmlDiferenciales += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 text-slate-600">${difX >= 0 ? '+' : ''}${difX.toFixed(2)}</td>
+                        <td class="py-2.5 text-slate-600">${difY >= 0 ? '+' : ''}${difY.toFixed(2)}</td>
+                        <td class="py-2.5 font-semibold text-indigo-600">${zx.toFixed(2)}</td>
+                        <td class="py-2.5 font-semibold text-indigo-600">${zy.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            document.getElementById('tablaDiferenciales').innerHTML = htmlDiferenciales;
+
+            // --- PESTAÑA 3: CÁLCULOS BIVARIADOS Y REGRESIÓN ---
+            const sumXY = sumXY_val;
+            const sumX2 = sumX2_val;
+            const sumY2 = sumY2_val;
+
+            const numeradorR = (n * sumXY) - (sumX_val * sumY_val);
+            const denominadorR = Math.sqrt(((n * sumX2) - (sumX_val * sumX_val)) * ((n * sumY2) - (sumY_val * sumY_val)));
             const r = denominadorR === 0 ? 0 : numeradorR / denominadorR;
 
-            const denominadorM = (n * sumX2) - (sumX * sumX);
-            const m = denominadorM === 0 ? 0 : ((n * sumXY) - (sumX * sumY)) / denominadorM;
-            const b = (sumY - (m * sumX)) / n;
+            const r2 = Math.pow(r, 2);
+            const noR2 = 1 - r2;
 
-            ultimaPendiente = m;
-            ultimaInterseccion = b;
+            const denominadorM = (n * sumX2) - (sumX_val * sumX_val);
+            const m = denominadorM === 0 ? 0 : ((n * sumXY) - (sumX_val * sumY_val)) / denominadorM;
+            const b = (sumY_val - (m * sumX_val)) / n;
+
+            ultimoM = m;
+            ultimoB = b;
 
             document.getElementById('resPearson').innerText = r.toFixed(4);
-            document.getElementById('resPendiente').innerText = m.toFixed(4);
-            document.getElementById('resInterseccion').innerText = b.toFixed(4);
+            document.getElementById('resR2').innerText = `${(r2 * 100).toFixed(2)}%`;
+            document.getElementById('resNoR2').innerText = `${(noR2 * 100).toFixed(2)}%`;
             
             const signoB = b >= 0 ? `+ ${b.toFixed(2)}` : `- ${Math.abs(b).toFixed(2)}`;
             document.getElementById('resEcuacion').innerText = `y = ${m.toFixed(2)}x ${signoB}`;
 
-            document.getElementById('resultsSection').classList.remove('hidden');
-            document.getElementById('chartSection').classList.remove('hidden');
-
+            generarAnalisisAcademico(r, r2, noR2, m, b, signoB);
             renderizarGraficoSeleccionado();
         }
 
-        function cambiarTipoGrafico() {
-            if (ultimosDatosX.length > 0 && ultimosDatosY.length > 0) {
-                renderizarGraficoSeleccionado();
-            }
+        function generarAnalisisAcademico(r, r2, noR2, m, b, signoB) {
+            let fuerza = "";
+            let direccion = r >= 0 ? "positiva (directa)" : "negativa (inversa)";
+            const absR = Math.abs(r);
+
+            if (absR >= 0.8) fuerza = "muy fuerte";
+            else if (absR >= 0.6) fuerza = "fuerte";
+            else if (absR >= 0.4) fuerza = "moderada";
+            else if (absR >= 0.2) fuerza = "débil";
+            else fuerza = "muy débil o nula";
+
+            const rRedondeado = r.toFixed(4);
+            const r2Porcentaje = (r2 * 100).toFixed(1);
+            const noR2Porcentaje = (noR2 * 100).toFixed(1);
+            const mRedondeado = m.toFixed(2);
+            const bAbsoluto = Math.abs(b).toFixed(2);
+
+            const html = `
+                <p><strong>1. Fuerza y Dirección:</strong> El coeficiente de Pearson (r = ${rRedondeado}) indica una correlación <strong>${fuerza}</strong> y ${direccion}. Esto significa que los movimientos de ambas variables tienden a sincronizarse en dicho sentido.</p>
+                <p><strong>2. Aplicación Financiera y Contable:</strong> El Coeficiente de Determinación (R² = ${r2Porcentaje}%) muestra la proporción de la variabilidad en la variable dependiente Y que es explicada por la variable independiente X. En gestión financiera, esto ayuda a entender qué tanto un factor operativo impacta en los costos o ingresos (el ${noR2Porcentaje}% restante, correspondiente a 1 - R², se debe a factores externos o errores aleatorios).</p>
+                <p><strong>3. Correlación frente a Causalidad:</strong> <em>¡Atención analítica!</em> Que exista una alta correlación estadística no implica necesariamente que X cause directamente a Y. Podría existir una tercera variable oculta o una relación espuria. La regresión lineal nos otorga un modelo de predicción matemática (y = ${mRedondeado}x ${signoB} ${bAbsoluto}), pero la causalidad debe validarse siempre mediante teoría contable, económica o auditoría forense.</p>
+            `;
+            document.getElementById('analisisAcademico').innerHTML = html;
         }
 
         function renderizarGraficoSeleccionado() {
+            if (ultimosX.length === 0) return;
+
             const tipoSeleccionado = document.getElementById('chartTypeSelect').value;
             const ctx = document.getElementById('statsChart').getContext('2d');
 
@@ -170,14 +364,14 @@
             }
 
             if (tipoSeleccionado === 'scatter') {
-                const puntosOriginales = ultimosDatosX.map((val, i) => ({ x: val, y: ultimosDatosY[i] }));
-                const xOrdenado = [...ultimosDatosX].sort((a, b) => a - b);
+                const puntosOriginales = ultimosX.map((val, i) => ({ x: val, y: ultimosY[i] }));
+                const xOrdenado = [...ultimosX].sort((a, b) => a - b);
                 const minX = xOrdenado[0];
                 const maxX = xOrdenado[xOrdenado.length - 1];
 
                 const lineaTendencia = [
-                    { x: minX, y: ultimaPendiente * minX + ultimaInterseccion },
-                    { x: maxX, y: ultimaPendiente * maxX + ultimaInterseccion }
+                    { x: minX, y: ultimoM * minX + ultimoB },
+                    { x: maxX, y: ultimoM * maxX + ultimoB }
                 ];
 
                 myChart = new Chart(ctx, {
@@ -207,10 +401,7 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { boxWidth: 12, font: { size: 11 } }
-                            }
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
                         },
                         scales: {
                             x: { type: 'linear', position: 'bottom', title: { display: true, text: 'X' } },
@@ -223,10 +414,10 @@
                 myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ultimosDatosX.map((val, i) => `X=${val}`),
+                        labels: ultimosX.map((val, i) => `X=${val}`),
                         datasets: [{
                             label: 'Valores de Y',
-                            data: ultimosDatosY,
+                            data: ultimosY,
                             backgroundColor: 'rgba(99, 102, 241, 0.6)',
                             borderColor: 'rgba(99, 102, 241, 1)',
                             borderWidth: 1,
@@ -236,12 +427,8 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, title: { display: true, text: 'Y' } }
-                        }
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, title: { display: true, text: 'Y' } } }
                     }
                 });
 
@@ -255,21 +442,16 @@
                 myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ultimosDatosX.map((val, i) => `X=${val} (Y=${ultimosDatosY[i]})`),
+                        labels: ultimosX.map((val, i) => `X=${val} (Y=${ultimosY[i]})`),
                         datasets: [{
-                            data: ultimosDatosY.map(val => Math.abs(val)), // Evitar errores visuales si hay negativos en pastel
-                            backgroundColor: coloresPastel.slice(0, ultimosDatosX.length)
+                            data: ultimosY.map(val => Math.abs(val)),
+                            backgroundColor: coloresPastel.slice(0, ultimosX.length)
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { boxWidth: 12, font: { size: 10 } }
-                            }
-                        }
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 9 } } } }
                     }
                 });
             }
